@@ -1,34 +1,41 @@
-class Solution {
+
+      class Solution {
 public:
     int largestInteger(vector<int>& nums, int k) {
+        unordered_map<int, int> mp;
         int n = nums.size();
-        int res = -1;
 
-        // Edge case: If k == n, return the max element
-        if (k == n) {
-            return *max_element(nums.begin(), nums.end());
+        // Count the frequency of each number in nums
+        for (int i = 0; i < n; i++) {
+            mp[nums[i]]++;
         }
 
-        // Traverse all subarrays of size k
-        for (int i = 0; i <= n - k; i++) {
-            unordered_map<int, int> freq;
+        int maxEle = -1, maxEleFreq = -1;
 
-            // Count frequencies in the current subarray
-            for (int j = 0; j < k; j++) {
-                freq[nums[i + j]]++;
-            }
-
-            // Find the largest number appearing exactly once in this subarray
-            for (auto& it : freq) {
-                if (it.second == 1) {
-                    res = max(res, it.first);
-                }
-            }
+        // Find the largest element and the largest unique element
+        for (auto it : mp) {
+            if (it.second == 1) 
+                maxEleFreq = max(maxEleFreq, it.first);
+            maxEle = max(maxEle, it.first);
         }
 
-        return res;
+        if (k == 1) 
+            return maxEleFreq;
+        else if (k == n) 
+            return maxEle;
+        else {
+            if (mp[nums[0]] == 1 && mp[nums[n - 1]] == 1)
+                return max(nums[0], nums[n - 1]);
+            else if (mp[nums[n - 1]] == 1) 
+                return nums[n - 1];
+            else if (mp[nums[0]] == 1) 
+                return nums[0];
+        }
+
+        return -1;
     }
 };
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 class Solution {
